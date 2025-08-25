@@ -3,7 +3,7 @@
     <div class="size-full flex flex-col gap-3">
       <div class="bg-base-200 size-full rounded-box">
         <div
-          v-html="marked(llmResponse)"
+          v-html="llmResponse"
           class="size-full max-w-none prose p-5 overflow-auto"></div>
       </div>
       <form class="flex gap-3">
@@ -32,15 +32,31 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from "vue";
+  import { ref, onMounted } from "vue";
   import axios from "axios";
   import { useStorage } from "@vueuse/core";
   import { marked } from "marked";
+  import { Ollama } from "ollama";
 
   const usrMessage = ref<string | undefined>();
   const llmResponse = useStorage<string>("llmResponse", "");
   const isBtnDisabled = ref<boolean>(false);
   const isThinkVisible = ref<boolean>(false);
+
+  // const ollama = new Ollama({ host: "http://127.0.0.1:11434/" });
+
+  // onMounted(() => {
+  //   lol();
+  // });
+
+  // async function lol() {
+  //   console.log(
+  //     await ollama.chat({
+  //       model: "deepseek-r1:8b",
+  //       messages: [{ role: "user", content: "Why is the sky blue?" }],
+  //     })
+  //   );
+  // }
 
   function sendMessage(message: string | undefined) {
     isBtnDisabled.value = true;
@@ -72,7 +88,7 @@
 </script>
 
 <style scoped lang="css">
-  article :deep(think) {
+  :deep(think) {
     color: var(--color-info);
     margin-bottom: 10px;
     display: v-bind("`${isThinkVisible ? 'inline-block' : 'none'}`");

@@ -20,6 +20,9 @@ importers:
       marked:
         specifier: ^16.2.0
         version: 16.2.0
+      ollama:
+        specifier: ^0.5.17
+        version: 0.5.17
       tailwindcss:
         specifier: ^4.1.12
         version: 4.1.12
@@ -764,6 +767,9 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  ollama@0.5.17:
+    resolution: {integrity: sha512-q5LmPtk6GLFouS+3aURIVl+qcAOPC4+Msmx7uBb3pd+fxI55WnGjmLZ0yijI/CYy79x0QPGx3BwC3u5zv9fBvQ==}
+
   path-browserify@1.0.1:
     resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
 
@@ -866,6 +872,9 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  whatwg-fetch@3.6.20:
+    resolution: {integrity: sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==}
 
   yallist@5.0.0:
     resolution: {integrity: sha512-YgvUTfwqyc7UXVMrB+SImsVYSmTS8X/tSrtdNZMImM+n7+QTriRXyXim0mBrTXNeqzVF0KWGgHPeiyViFFrNDw==}
@@ -1450,6 +1459,10 @@ snapshots:
 
   nanoid@3.3.11: {}
 
+  ollama@0.5.17:
+    dependencies:
+      whatwg-fetch: 3.6.20
+
   path-browserify@1.0.1: {}
 
   picocolors@1.1.1: {}
@@ -1542,5 +1555,7 @@ snapshots:
       '@vue/shared': 3.5.20
     optionalDependencies:
       typescript: 5.8.3
+
+  whatwg-fetch@3.6.20: {}
 
   yallist@5.0.0: {}
