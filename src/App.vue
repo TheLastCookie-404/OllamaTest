@@ -33,7 +33,7 @@
   import { marked } from "marked";
   import { Ollama } from "ollama";
 
-  const usrMessage = ref<string | undefined>();
+  const usrMessage = ref<string>("Hello");
   const llmResponse = useStorage<string>("llmResponse", "");
   const isBtnDisabled = ref<boolean>(false);
   const isThinkVisible = ref<boolean>(false);
@@ -42,7 +42,7 @@
     // host: "http://127.0.0.1:11434/"
   });
 
-  async function sendMessage(message: string | undefined) {
+  async function sendMessage(message: string) {
     console.log("Sending Message");
 
     llmResponse.value = "";
