@@ -1,23 +1,26 @@
 <template>
-  <div class="fixed top-0 left-0 size-full p-3 grid place-items-center">
-    <div class="size-full flex flex-col gap-3">
-      <div class="bg-base-200 size-full rounded-box">
-        <div v-html="llmResponse" class="size-full max-w-none prose p-5 overflow-auto"></div>
+  <div class="fixed top-0 left-0 size-full p-3">
+    <div class="h-full flex flex-col gap-3">
+      <div class="bg-base-200 h-full rounded-box overflow-auto">
+        <div v-html="llmResponse" class="p-5"></div>
       </div>
-      <form class="flex gap-3">
-        <div class="bg-base-200 flex gap-3 items-center px-5 rounded-field">
-          <label class="label">Thoughts: </label>
-          <label class="swap text-sm">
-            <input v-model="isThinkVisible" type="checkbox" />
-            <span class="swap-on text-success">ON</span>
-            <span class="swap-off text-error">OFF</span>
-          </label>
+
+      <form class="block shrink-0+">
+        <div class="flex gap-3">
+          <div class="bg-base-200 flex gap-3 items-center px-5 rounded-field">
+            <label class="label">Thoughts: </label>
+            <label class="swap text-sm">
+              <input v-model="isThinkVisible" type="checkbox" />
+              <span class="swap-on text-success">ON</span>
+              <span class="swap-off text-error">OFF</span>
+            </label>
+          </div>
+          <input v-model="usrMessage" type="text" placeholder="Type here" class="input w-full" />
+          <button @click.prevent="sendMessage(usrMessage)" class="btn btn-success w-20" :disabled="isBtnDisabled">
+            <span v-if="!isBtnDisabled">Send</span>
+            <span v-else class="loading loading-dots loading-xs"></span>
+          </button>
         </div>
-        <input v-model="usrMessage" type="text" placeholder="Type here" class="input w-full" />
-        <button @click.prevent="sendMessage(usrMessage)" class="btn btn-success w-20" :disabled="isBtnDisabled">
-          <span v-if="!isBtnDisabled">Send</span>
-          <span v-else class="loading loading-dots loading-xs"></span>
-        </button>
       </form>
     </div>
   </div>
@@ -35,7 +38,9 @@
   const isBtnDisabled = ref<boolean>(false);
   const isThinkVisible = ref<boolean>(false);
 
-  const ollama = new Ollama({ host: "http://127.0.0.1:11434/" });
+  const ollama = new Ollama({
+    // host: "http://127.0.0.1:11434/"
+  });
 
   async function sendMessage(message: string | undefined) {
     console.log("Sending Message");
@@ -96,6 +101,6 @@
   :deep(think) {
     color: var(--color-info);
     margin-bottom: 10px;
-    display: v-bind("`${isThinkVisible ? 'inline-block' : 'none'}`");
+    display: v-bind("`${isThinkVisible ? 'block' : 'none'}`");
   }
 </style>
