@@ -2,9 +2,7 @@
   <div class="fixed top-0 left-0 size-full p-3 grid place-items-center">
     <div class="size-full flex flex-col gap-3">
       <div class="bg-base-200 size-full rounded-box">
-        <div
-          v-html="llmResponse"
-          class="size-full max-w-none prose p-5 overflow-auto"></div>
+        <div v-html="llmResponse" class="size-full max-w-none prose p-5 overflow-auto"></div>
       </div>
       <form class="flex gap-3">
         <div class="bg-base-200 flex gap-3 items-center px-5 rounded-field">
@@ -15,16 +13,10 @@
             <span class="swap-off text-error">OFF</span>
           </label>
         </div>
-        <input
-          v-model="usrMessage"
-          type="text"
-          placeholder="Type here"
-          class="input w-full" />
-        <button
-          @click="sendMessage(usrMessage)"
-          class="btn btn-success"
-          :disabled="isBtnDisabled">
-          Send
+        <input v-model="usrMessage" type="text" placeholder="Type here" class="input w-full" />
+        <button @click.prevent="sendMessage(usrMessage)" class="btn btn-success w-20" :disabled="isBtnDisabled">
+          <span v-if="!isBtnDisabled">Send</span>
+          <span v-else class="loading loading-dots loading-xs"></span>
         </button>
       </form>
     </div>
@@ -43,48 +35,61 @@
   const isBtnDisabled = ref<boolean>(false);
   const isThinkVisible = ref<boolean>(false);
 
-  // const ollama = new Ollama({ host: "http://127.0.0.1:11434/" });
+  const ollama = new Ollama({ host: "http://127.0.0.1:11434/" });
 
-  // onMounted(() => {
-  //   lol();
-  // });
+  async function sendMessage(message: string | undefined) {
+    console.log("Sending Message");
 
-  // async function lol() {
-  //   console.log(
-  //     await ollama.chat({
-  //       model: "deepseek-r1:8b",
-  //       messages: [{ role: "user", content: "Why is the sky blue?" }],
-  //     })
-  //   );
-  // }
-
-  function sendMessage(message: string | undefined) {
+    llmResponse.value = "";
     isBtnDisabled.value = true;
 
-    axios
-      .post(
-        "http://127.0.0.1:11434/api/generate",
+    const response = await ollama.chat({
+      model: "deepseek-r1:8b",
+      messages: [
         {
-          model: "deepseek-r1:8b",
-          prompt: message,
-          stream: false,
+          role: "user",
+          content: message,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        llmResponse.value = response.data.response;
+      ],
+      stream: true,
+    });
 
-        isBtnDisabled.value = false;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    for await (const part of response) {
+      llmResponse.value = `${llmResponse.value} ${part.message.content}`;
+    }
+
+    isBtnDisabled.value = false;
   }
+
+  // function sendMessage(message: string | undefined) {
+  //   isBtnDisabled.value = true;
+
+  //   axios
+  //     .post(
+  //       "http://127.0.0.1:11434/api/generate",
+  //       {
+  //         model: "deepseek-r1:8b",
+  //         prompt: message,
+  //         stream: false,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       console.log(response);
+  //       llmResponse.value = response.data.response;
+
+  //       isBtnDisabled.value = false;
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+
+  //       isBtnDisabled.value = false;
+  //     });
+  // }
 </script>
 
 <style scoped lang="css">
